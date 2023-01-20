@@ -36,6 +36,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    /**
+     * User Email
+     */
     #[ORM\Column(length: 180, unique: true)]
     #[Groups(['user:read', 'user:write'])]
     #[Assert\NotBlank]
@@ -52,11 +55,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     /**
-     * at least baslbalb
+     * User password which length must be between 6 and 20 characters and 
+     * contain at least one small letter, one big letter and one digit
      */
     #[Groups('user:write')]
     #[SerializedName('password')]
     #[Assert\NotBlank()]
+    #[Assert\Length(
+        min: 6,
+        max: 20,
+        minMessage: 'Password must be at least {{ limit }} characters long',
+        maxMessage: 'Password cannot be longer than {{ limit }} characters',
+    )]
+    #[Assert\Regex(
+        pattern: '/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/',
+        message: 'Password should contain at least one small letter, big letter and digit',
+    )]
     private ?string $plainPassword = null;
 
     public function getId(): ?int
