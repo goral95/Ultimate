@@ -31,6 +31,8 @@ security:
             jwt: ~
             refresh_jwt:
                 check_path: /api/token/refresh
+            logout:
+                path: /api/logout
             
 
     access_control:
